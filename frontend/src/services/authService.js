@@ -13,8 +13,17 @@ const authService = {
     },
 
     getCurrentUser: () => {
-        const token = localStorage.getItem('token');
-        return token ? JSON.parse(atob(token.split('.')[1])) : null;
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return null;
+            const payload = token.split('.')[1];
+            if (!payload) return null;
+            return JSON.parse(atob(payload));
+        } catch (error) {
+            console.warn('Invalid token in localStorage:', error);
+            localStorage.removeItem('token');
+            return null;
+        }
     },
 
     setToken: (token) => {

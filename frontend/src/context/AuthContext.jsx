@@ -10,10 +10,12 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        // Check for existing token on app load
         if (token) {
             setUser(authService.getCurrentUser());
         }
-    }, [token]);
+        setLoading(false); // Always set loading to false after initial check
+    }, []);
 
     const login = async (email, password) => {
         setLoading(true);
