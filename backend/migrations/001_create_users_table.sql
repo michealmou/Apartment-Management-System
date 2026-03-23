@@ -7,7 +7,7 @@ CREATE TABLE users (
     phone VARCHAR(20),
     address VARCHAR(255),
     is_active BOOLEAN DEFAULT true,
-    lsat_login TIMESTAMP,
+    last_login TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

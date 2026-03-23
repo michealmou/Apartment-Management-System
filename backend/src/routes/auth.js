@@ -1,29 +1,17 @@
 const express = require('express');
+const AuthController = require('../controllers/authController');
+const { authenticate, requireAdmin } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-// placeholder routes for authentication
-router.post('/login', (req, res) => {
-    // Implement login logic here
-    res.json({
-        success: true,
-        message: 'register route - to be implemented',
-    });
-});
+//public routes
+router.post('/register', AuthController.register);
+router.post('/login', AuthController.login);
+router.post('/refresh', AuthController.refreshToken);
 
-router.post('/register', (req, res) => {
-    // Implement registration logic here
-    res.json({
-        success: true,
-        message: 'register route - to be implemented',          
-    });
-});
 
-router.post('/logout', (req, res) => {
-    // Implement logout logic here
-    res.json({
-        success: true,
-        message: 'logout route - to be implemented',
-    });
-});
+//protected routes
+router.post('/logout', authenticate, AuthController.logout);
+router.get('/me', authenticate, AuthController.getCurrentUser);
 
 module.exports = router;
+
