@@ -1,59 +1,51 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../context/AuthContext';
+import '../../styles/Header.css';
 
 const Header = () => {
-    const { isAuthenticated, user, logout } = useAuth();
     const navigate = useNavigate();
+    const { user, isAuthenticated, logout, isAdmin } = useAuth();
 
     const handleLogout = () => {
         logout();
         navigate('/login');
     };
-
+    if (!isAuthenticated()) {
+        return null; // Don't render header if not authenticated
+    }
     return (
-        <header className="bg-white shadow">
-            <div className="container mx-auto px-4 py-4">
-                <div className="flex justify-between items-center">
-                    <Link to="/" className="text-2xl font-bold text-primary">
-                        🏢 AMS
-                    </Link>
-                    <nav className="flex items-center gap-8">
-                        {isAuthenticated ? (
+        <header className="header">
+            <div className="header-container">
+                <div className="header-brand">
+                    <Link to="/">Apartment Management</Link>
+                </div>
+
+                <nav className="header-nav">
+                    <ul>
+                        {isAdmin() ? (
                             <>
-                                <Link to="/dashboard" className="text-gray-600 hover:text-primary">
-                                    Dashboard
-                                </Link>
-                                <Link to="/tenants" className="text-gray-600 hover:text-primary">
-                                    Tenants
-                                </Link>
-                                <Link to="/payments" className="text-gray-600 hover:text-primary">
-                                    Payments
-                                </Link>
-                                <div className="flex items-center gap-4">
-                                    <span className="text-gray-600">{user?.email}</span>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="bg-danger text-white px-4 py-2 rounded hover:bg-red-600"
-                                    >
-                                        Logout
-                                    </button>
-                                </div>
+                                <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
+                                <li><Link to="/admin/users">Users</Link></li>
+                                <li><Link to="/admin/tenants">Tenants</Link></li>
+                                <li><Link to="/admin/payments">Payments</Link></li>
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="text-gray-600 hover:text-primary">
-                                    Login
-                                </Link>
-                                <Link
-                                    to="/register"
-                                    className="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600"
-                                >
-                                    Register
-                                </Link>
+                                <li><Link to="/dashboard">Dashboard</Link></li>
+                                <li><Link to="/tenants">My Info</Link></li>
+                                <li><Link to="/payments">Payments</Link></li>
                             </>
                         )}
-                    </nav>
+                    </ul>
+                </nav>
+
+                <div className="header-user">
+                    <span className="user-name">{user?.name}</span>
+                    <span className="user-role">({user?.role})</span>
+                    <button onClick={handleLogout} className="btn btn-logout">
+                        Logout
+                    </button>
                 </div>
             </div>
         </header>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
-
+import Header from './components/common/Header';
+import Footer from './components/common/Footer';
 // layouts
 
 import MainLayout from './layouts/MainLayout';
@@ -15,101 +16,74 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Tenants from './pages/Tenants';
+import AdminDashboard from './pages/AdminDashboard';
 import TenantDetails from './pages/TenantDetails';
 import Payments from './pages/Payments';
 import PaymentDetails from './pages/PaymentDetails';
 import NotFound from './pages/NotFound';
 
-function App(){
-    return(
+import './App.css';
+
+function App() {
+    return (
         <Router>
             <AuthProvider>
-                <Routes>
-                    {/* Public Routes */}
-                    <Route
-                    path = "/"
-                    element={
-                        <MainLayout>
-                            <Home />
-                        </MainLayout>
-                    }
-                    />
-                    <Route
-                    path = "/login"
-                    element={
-                        <AuthLayout>
-                            <Login />
-                        </AuthLayout>
-                    }
-                    />
-                    <Route
-                    path = "/register"
-                    element={
-                        <AuthLayout>
-                            <Register />
-                        </AuthLayout>
-                    }
-                    />
-                    <Route
-                    path = "/dashboard"
-                    element={
-                        <PrivateRoute>
-                            <MainLayout>
-                                <Dashboard />
-                            </MainLayout>
-                        </PrivateRoute>
-                    }
-                    />
-                    <Route
-                    path = "/tenants"
-                    element={
-                        <PrivateRoute>
-                            <MainLayout>
-                                <Tenants />
-                            </MainLayout>
-                        </PrivateRoute>
-                    }
-                    />
-                    <Route
-                    path = "/tenants/:id"
-                    element={
-                        <PrivateRoute>
-                            <MainLayout>
-                                <TenantDetails />
-                            </MainLayout>
-                        </PrivateRoute>
-                    }
-                    />
-                    <Route
-                    path="/payments"
-                    element={
-                        <PrivateRoute>
-                            <MainLayout>
-                                <Payments />
-                            </MainLayout>
-                        </PrivateRoute>
-                    }
-                    />
-                    <Route
-                    path="/payments/:id"
-                    element={
-                        <PrivateRoute>
-                            <MainLayout>
-                                <PaymentDetails />
-                            </MainLayout>
-                        </PrivateRoute>
-                    }
-                    />
-                    {/* Catch-all route for 404 Not Found */}
-                    <Route
-                        path="*"
-                        element={
-                            <MainLayout>
-                                <NotFound />
-                            </MainLayout>
-                        }
-                    />
-                </Routes>
+                <div className="app">
+                    <Header />
+
+                    <main className="app-content">
+                        <Routes>
+                            {/* Public Routes */}
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+
+                            {/* Protected Routes - Tenant/User */}
+                            <Route
+                                path="/dashboard"
+                                element={
+                                    <PrivateRoute requiredRole={['tenant', 'admin']}>
+                                        <Dashboard />
+                                    </PrivateRoute>
+                                }
+                            />
+
+                            <Route
+                                path="/tenants"
+                                element={
+                                    <PrivateRoute requiredRole={['tenant', 'admin']}>
+                                        <Tenants />
+                                    </PrivateRoute>
+                                }
+                            />
+
+                            <Route
+                                path="/payments"
+                                element={
+                                    <PrivateRoute requiredRole={['tenant', 'admin']}>
+                                        <Payments />
+                                    </PrivateRoute>
+                                }
+                            />
+
+                            {/* Protected Routes - Admin Only */}
+                            <Route
+                                path="/admin/dashboard"
+                                element={
+                                    <PrivateRoute requiredRole="admin">
+                                        <AdminDashboard />
+                                    </PrivateRoute>
+                                }
+                            />
+
+                            {/* Error Routes */}
+                            <Route path="/unauthorized" element={<NotFound />} />
+                            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+                    </main>
+
+                    <Footer />
+                </div>
             </AuthProvider>
         </Router>
     );

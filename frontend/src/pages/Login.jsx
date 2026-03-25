@@ -1,67 +1,109 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useForm } from 'react-hook-form';
+import { useAuth } from '../context/AuthContext';
+import '../styles/Login.css';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
-    const { login } = useAuth();
     const navigate = useNavigate();
+    const { login, loading, error: authError } = useAuth();
+    const { register, handleSubmit, formState: { errors }, setError } = useForm();
+    const [generalError, setGeneralError] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        setLoading(true);
+    const onSubmit = async (data) => {
         try {
-            await login(email, password);
-            navigate('/dashboard');
+            setGeneralError(null);
+            const user = await login(data.email, data.password);
+
+            // Redirect based on role
+            if (user.role === 'admin') {
+                navigate('/admin/dashboard');
+            } else if (user.role === 'tenant') {
+                navigate('/dashboard');
+            } else {
+                navigate('/');
+            }
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
-        } finally {
-            setLoading(false);
+            setGeneralError(err.message || 'Login failed. Please try again.');
         }
     };
+
     return (
-        <div>
-            <h1 className="text-3xl font-bold text-center mb-6">Login</h1>
-            {error && <div className="text-danger text-sm mb-4 p-3 bg-red-50 rounded">{error}</div>}
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                        required
-                    />
+        <div className="login-container">
+            <div className="login-card">
+                <h1>Apartment Management System</h1>
+                <h2>Login</h2>
+
+                {generalError && (
+                    <div className="alert alert-error">
+                        {generalError}
+                    </div>
+                )}
+
+                {authError && (
+                    <div className="alert alert-error">
+                        {authError}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit(onSubmit)} className="login-form">
+                    {/* Email Field */}
+                    <div className="form-group">
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            {...register('email', {
+                                required: 'Email is required',
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: 'Invalid email format'
+                                }
+                            })}
+                            className={errors.email ? 'input-error' : ''}
+                        />
+                        {errors.email && (
+                            <span className="error-message">{errors.email.message}</span>
+                        )}
+                    </div>
+
+                    {/* Password Field */}
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            {...register('password', {
+                                required: 'Password is required',
+                                minLength: {
+                                    value: 8,
+                                    message: 'Password must be at least 8 characters'
+                                }
+                            })}
+                            className={errors.password ? 'input-error' : ''}
+                        />
+                        {errors.password && (
+                            <span className="error-message">{errors.password.message}</span>
+                        )}
+                    </div>
+
+                    {/* Submit Button */}
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="btn btn-primary"
+                    >
+                        {loading ? 'Logging in...' : 'Login'}
+                    </button>
+                </form>
+
+                {/* Register Link */}
+                <div className="login-footer">
+                    <p>Don't have an account? <Link to="/register">Register here</Link></p>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                        required
-                    />
-                </div>
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-primary text-white py-2 rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50"
-                >
-                    {loading ? 'Logging in...' : 'Login'}
-                </button>
-            </form>
-            <p className="text-center mt-4 text-gray-600">
-                Don't have an account? <Link to="/register" className="text-primary hover:underline">Register here</Link>
-            </p>
-            <p className="text-center mt-2 text-gray-600">
-                <Link to="/" className="text-primary hover:underline">← Back to Home</Link>
-            </p>
+            </div>
         </div>
     );
 };
