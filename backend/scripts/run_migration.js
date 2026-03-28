@@ -15,8 +15,13 @@ const runMigrations = async () => {
                 await db.query(sql);
                 console.log(`✅ Successfully ran migration: ${file}`);
             } catch (error) {
-                console.error(`❌ Error running migration ${file}:`, error);
-                process.exit(1);
+                // Allow "already exists" errors since migrations use IF NOT EXISTS
+                if (error.message && error.message.includes('already exists')) {
+                    console.log(`⚠️  Migration ${file}: Table already exists (skipped)`);
+                } else {
+                    console.error(`❌ Error running migration ${file}:`, error);
+                    process.exit(1);
+                }
             }
         }
     }

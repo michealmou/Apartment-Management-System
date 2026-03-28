@@ -67,6 +67,11 @@ class User {
         const result = await db.query(query, [userId]);
         return result.rows[0]?.role === 'admin';
     }
+    static async findById(userId) {
+        const query = 'SELECT id, name, email, role, phone, is_active FROM users WHERE id = $1;';
+        const result = await db.query(query, [userId]);
+        return result.rows[0];
+    }
 }
 
 module.exports = User;

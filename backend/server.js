@@ -1,5 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const authRoutes = require('./src/routes/auth');
+const tenantRoutes = require('./src/routes/tenants');
+const paymentRoutes = require('./src/routes/payments');
 require('dotenv').config();
 
 const app = express();
@@ -19,9 +22,9 @@ app.get('/health', (req, res) => {
         timestamp: new Date()});
 });
 //routes
-app.use('/api/auth', require('./src/routes/auth'));
-app.use('/api/tenants', require('./src/routes/tenants'));
-app.use('/api/payments', require('./src/routes/payments'));
+app.use('/api/auth', authRoutes);
+app.use('/api/tenants', tenantRoutes);
+app.use('/api/payments', paymentRoutes);
 
 //error handling middleware
 app.use((err, req, res, next) => {

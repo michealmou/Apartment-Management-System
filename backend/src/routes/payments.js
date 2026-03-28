@@ -1,34 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/auth');
+const paymentController = require('../controllers/paymentController');
+const { authenticate, requireAdmin } = require('../middleware/authMiddleware');
 
-// placeholder routes for payments
-router.get('/', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Get all payments - to be implemented',
-    });
-});
+// All payment rots require authentication
+router.use(authenticate);
 
-router.post('/', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Record payment - to be implemented',
-    });
-});
+// statistics endpoint (plce before /:id to avoid conflict)
+router.get('/stats', paymentController.getPaymentStats);
 
-router.get('/:id', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Get payment ${req.params.id} - to be implemented',
-    });
-});
+// all payments - admin only
+router.get('/', requireAdmin, paymentController.getAllPayments);
 
-router.put('/:id', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Update payment ${req.params.id} - to be implemented',
-    });
-});
+// create payment - admin only
+router.post('/', requireAdmin, paymentController.createPayment);
+
+// get single payment by id 
+router.get('/:id', paymentController.getPaymentById);
+
+// update payment - admin only
+router.put('/:id', requireAdmin, paymentController.updatePayment);
+
+// get tenant payment history - admin or self
+router.get('/tenant/:tenant_id', paymentController.getTenantPayments);
 
 module.exports = router;
