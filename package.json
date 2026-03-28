@@ -10,9 +10,14 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build" : "react-scripts build",
-    "test": "react-scripts test",
+    "build": "react-scripts build",
+    "dev": "PORT=3000 react-scripts start",
     "eject": "react-scripts eject",
-    "dev": "PORT=3000 react-scripts start"
+    "test": "jest --detectOpenHandles",
+    "test:watch": "jest --watch",
+    "test:verbose": "jest --verbose",
+    "test:coverage": "jest --coverage",
+    "test:auth": "jest --testPathPattern=auth",
+    "test:ci": "jest --ci --coverage --maxWorkers=2"
   }
 }
