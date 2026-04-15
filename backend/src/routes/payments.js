@@ -23,5 +23,7 @@ router.put('/:id', requireAdmin, paymentController.updatePayment);
 
 // get tenant payment history - admin or self
 router.get('/tenant/:tenant_id', paymentController.getTenantPayments);
-
+router.get('/stats/monthly-collected', authMiddleware, requireAdmin, paymentController.getMonthlyRentCollected);
+router.get('/stats/outstanding', authMiddleware, requireAdmin, paymentController.getOutstandingBalance);
+router.get('/stats/status-overview', authMiddleware, requireAdmin, paymentController.getPaymentStats);
 module.exports = router;

@@ -1,9 +1,10 @@
 import axios from 'axios';
 import authService from './authService';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+const API_VERSION = process.env.REACT_APP_API_VERSION || 'v1';
 //create axios instance
 const api = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: `${API_BASE_URL}/api/${API_VERSION}`,
     headers: {
         'Content-Type': 'application/json',
     },

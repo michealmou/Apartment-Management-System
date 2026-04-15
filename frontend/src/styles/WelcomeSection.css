@@ -1,0 +1,95 @@
+.welcome-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    margin: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.welcome-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.greeting h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.greeting .user-name {
+    background: linear-gradient(90deg, #ffd89b, #19547b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 900;
+}
+
+.welcome-message {
+    margin: 0;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.date-time {
+    text-align: right;
+    min-width: 150px;
+}
+
+.date {
+    margin: 0 0 0.25rem;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.time {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .welcome-section {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .welcome-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .greeting h1 {
+        font-size: 1.5rem;
+    }
+
+    .date-time {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-section {
+        margin: 0.75rem;
+        padding: 1rem;
+    }
+
+    .greeting h1 {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .welcome-message {
+        font-size: 0.85rem;
+    }
+
+    .time {
+        font-size: 1.25rem;
+    }
+}

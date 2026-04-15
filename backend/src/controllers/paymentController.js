@@ -253,3 +253,80 @@ exports.getPaymentStats = async (req, res) => {
         });
     }
 };
+/**
+ * Get statistics for dashboard
+ */
+exports.getPaymentStats = async (req, res) => {
+    try {
+        const db = require('../config/database');
+        
+        // Get status overview
+        const statusQuery = `
+            SELECT 
+                status,
+                COUNT(*) as count
+            FROM payments
+            GROUP BY status
+        `;
+        
+        const result = await db.query(statusQuery);
+        const statusOverview = {
+            paid: 0,
+            pending: 0,
+            overdue: 0,
+            partial: 0
+        };
+
+        result.rows.forEach(row => {
+            statusOverview[row.status.toLowerCase()] = parseInt(row.count);
+        });
+
+        res.json(statusOverview);
+    } catch (error) {
+        console.error('Error fetching payment stats:', error);
+        res.status(500).json({ error: 'Failed to fetch payment statistics' });
+    }
+};
+
+/**
+ * Get monthly rent collected
+ */
+exports.getMonthlyRentCollected = async (req, res) => {
+    try {
+        const db = require('../config/database');
+        
+        const query = `
+            SELECT COALESCE(SUM(amount), 0) as totalCollected
+            FROM payments
+            WHERE status = 'paid'
+            AND DATE_TRUNC('month', payment_date) = DATE_TRUNC('month', NOW())
+        `;
+        
+        const result = await db.query(query);
+        res.json({ totalCollected: parseFloat(result.rows[0].totalcollected) });
+    } catch (error) {
+        console.error('Error fetching monthly rent:', error);
+        res.status(500).json({ error: 'Failed to fetch monthly rent' });
+    }
+};
+
+/**
+ * Get outstanding balance
+ */
+exports.getOutstandingBalance = async (req, res) => {
+    try {
+        const db = require('../config/database');
+        
+        const query = `
+            SELECT COALESCE(SUM(amount), 0) as totalOutstanding
+            FROM payments
+            WHERE status IN ('pending', 'overdue', 'partial')
+        `;
+        
+        const result = await db.query(query);
+        res.json({ totalOutstanding: parseFloat(result.rows[0].totaloutstanding) });
+    } catch (error) {
+        console.error('Error fetching outstanding balance:', error);
+        res.status(500).json({ error: 'Failed to fetch outstanding balance' });
+    }
+};

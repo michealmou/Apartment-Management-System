@@ -21,10 +21,13 @@ app.get('/health', (req, res) => {
         status: 'ok',
         timestamp: new Date()});
 });
-//routes
-app.use('/api/auth', authRoutes);
-app.use('/api/tenants', tenantRoutes);
-app.use('/api/payments', paymentRoutes);
+//routes - all under /api/v1 prefix
+const apiRouter = express.Router();
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/tenants', tenantRoutes);
+apiRouter.use('/payments', paymentRoutes);
+
+app.use('/api/v1', apiRouter);
 
 //error handling middleware
 app.use((err, req, res, next) => {
