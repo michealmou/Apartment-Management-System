@@ -55,7 +55,7 @@ const requireAdminOrManager = (req, res, next) => {
 };
 
 module.exports = {
-    authenticate: authMiddleware,
+    authMiddleware,
     requireAdmin,
     requireAdminOrManager,
 };

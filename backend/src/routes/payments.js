@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const paymentController = require('../controllers/paymentController');
-const { authenticate, requireAdmin } = require('../middleware/authMiddleware');
+const { authMiddleware, requireAdmin } = require('../middleware/authMiddleware');
 
 // All payment rots require authentication
-router.use(authenticate);
+router.use(authMiddleware);
 
 // statistics endpoint (plce before /:id to avoid conflict)
 router.get('/stats', paymentController.getPaymentStats);

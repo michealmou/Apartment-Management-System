@@ -1,41 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/auth');
+const { authMiddleware, requireAdmin } = require('../middleware/authMiddleware');
+const TenantController = require('../controllers/tenantController');
 
-//placeholder routes for tenants
-router.get('/', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Get all tenants - to be implemented',
-    });
-});
+// All routes require authentication and admin role
+router.use(authMiddleware, requireAdmin);
 
-router.post('/', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Create tenant - to be implemented',
-    });
-});
+// list tenants with pagination and filters and searching
+router.get('/', TenantController.getAll);
 
-router.get('/:id', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Get tenant ${req.params.id} - to be implemented',
-    });
-});
+// get tenant by id
+router.get('/:id', TenantController.getById);
 
-router.put('/:id', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Update tenant ${req.params.id} - to be implemented',
-    });
-});
+// create new tenant
+router.post('/', TenantController.create);
 
-router.delete('/:id', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Delete tenant ${req.params.id} - to be implemented',
-    });
-});
+// update tenant
+router.put('/:id', TenantController.update);
+
+// delete tenant
+router.delete('/:id', TenantController.delete);
 
 module.exports = router;

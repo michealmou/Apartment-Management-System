@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apartment Management System - Project Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 20px;
+            }
+            .no-print {
+                display: none;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+            pre {
+                page-break-inside: avoid;
+                overflow: hidden;
+                white-space: pre-wrap;
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #1e40af;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+            margin: 5px 0;
+        }
+
+        .report-meta {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .meta-item {
+            font-size: 0.95em;
+        }
+
+        .meta-label {
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 3px;
+        }
+
+        .meta-value {
+            color: #555;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #1e40af;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2563eb;
+        }
+
+        h3 {
+            color: #2563eb;
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #3b82f6;
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h4 {
+            color: white;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .tech-category {
+            background: #f9fafb;
+            padding: 20px;
+            border-left: 4px solid #2563eb;
+            border-radius: 4px;
+        }
+
+        .tech-category h4 {
+            margin-top: 0;
+            color: #1e40af;
+        }
+
+        .tech-category ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tech-category li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tech-category li:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 3px 5px 3px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        table thead {
+            background: #1e40af;
+            color: white;
+        }
+
+        table th, table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        table tbody tr:hover {
+            background: #f3f4f6;
+        }
+
+        table tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .diagram {
+            background: #f0f4f8;
+            padding: 20px;
+            border-left: 4px solid #2563eb;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 15px 0;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 15px;
+            border-left: 4px solid #f59e0b;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .highlight strong {
+            color: #b45309;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .controls button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: background 0.3s;
+        }
+
+        .controls button:hover {
+            background: #1e40af;
+        }
+
+        .table-of-contents {
+            background: #f0f4f8;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .table-of-contents h3 {
+            margin-top: 0;
+            color: #1e40af;
+        }
+
+        .table-of-contents ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .table-of-contents li {
+            padding: 8px 0 8px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table-of-contents li:last-child {
+            border-bottom: none;
+        }
+
+        .table-of-contents a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .table-of-contents a:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 30px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: #2563eb;
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px #2563eb;
+        }
+
+        .timeline-item::after {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 20px;
+            width: 4px;
+            height: 30px;
+            background: #e5e7eb;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .timeline-item h4 {
+            margin: 0 0 10px 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 2px solid #e5e7eb;
+            color: #666;
+            margin-top: 60px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .report-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-stack {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                position: static;
+                justify-content: center;
+                margin-top: 40px;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏢 Apartment Management System</h1>
+            <p>Full-Stack Web Application for Managing Apartment Properties</p>
+            <p style="font-size: 0.95em; margin-top: 15px;">
+                <span class="status-badge">Active Development</span>
+            </p>
+        </div>
+
+        <!-- Report Metadata -->
+        <div class="report-meta">
+            <div class="meta-item">
+                <div class="meta-label">Report Generated</div>
+                <div class="meta-value" id="generated-date"></div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Project Status</div>
+                <div class="meta-value">Active Development</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Technology Stack</div>
+                <div class="meta-value">Node.js, React, PostgreSQL</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">License</div>
+                <div class="meta-value">MIT</div>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="table-of-contents">
+            <h3>📑 Table of Contents</h3>
+            <ul>
+                <li><a href="#overview">1. Project Overview</a></li>
+                <li><a href="#features">2. Core Features</a></li>
+                <li><a href="#tech-stack">3. Technology Stack</a></li>
+                <li><a href="#database">4. Database Schema</a></li>
+                <li><a href="#structure">5. Project Structure</a></li>
+                <li><a href="#roadmap">6. Implementation Roadmap</a></li>
+                <li><a href="#quick-start">7. Quick Start Guide</a></li>
+                <li><a href="#prerequisites">8. Prerequisites & Setup</a></li>
+            </ul>
+        </div>
+
+        <!-- 1. Project Overview -->
+        <section id="overview">
+            <h2>1. Project Overview</h2>
+            
+            <h3>System Purpose</h3>
+            <p>
+                The Apartment Management System is a comprehensive web-based application designed to streamline the 
+                management of apartment complexes. It focuses on tenant management, rent payment tracking, and access 
+                control, providing separate interfaces for administrators and tenants with role-based access control 
+                ensuring data security and appropriate functionality availability.
+            </p>
+
+            <h3>Key Objectives</h3>
+            <ul>
+                <li><strong>Efficient Tenant Management:</strong> Centralized tenant information storage and management</li>
+                <li><strong>Transparent Payment Tracking:</strong> Real-time rent payment status and history</li>
+                <li><strong>Role-Based Access:</strong> Separate functionality for admins and tenants</li>
+                <li><strong>User-Friendly Interface:</strong> Clean, intuitive UI for both user types</li>
+                <li><strong>Data Integrity:</strong> Comprehensive audit trails and payment records</li>
+            </ul>
+
+            <h3>User Roles</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Responsibilities</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Admin</strong></td>
+                        <td>Full system control, tenant management, payment tracking, reporting, audit logs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tenant</strong></td>
+                        <td>View personal information, check payment status, view payment history</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 2. Core Features -->
+        <section id="features">
+            <h2>2. Core Features</h2>
+
+            <h3>🎯 Functionality</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔐 User Authentication</h4>
+                    <p>Secure login/registration with role-based access control and JWT tokens</p>
+                </div>
+                <div class="feature-card">
+                    <h4>👥 Tenant Management</h4>
+                    <p>Add, edit, and manage tenant profiles with complete information</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💰 Payment Tracking</h4>
+                    <p>Track rent payments and maintain detailed payment history</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Admin Dashboard</h4>
+                    <p>Comprehensive admin controls and system management</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📋 Audit Logs</h4>
+                    <p>Track all system actions for compliance and security</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔒 Role-Based Access</h4>
+                    <p>Control access to features based on user roles</p>
+                </div>
+            </div>
+
+            <h3>🔐 Security Features</h3>
+            <ul>
+                <li>JWT-based authentication</li>
+                <li>Password hashing with bcryptjs</li>
+                <li>Role-based access control (RBAC)</li>
+                <li>Comprehensive audit logging</li>
+                <li>Secure session management</li>
+                <li>Data validation and sanitization</li>
+            </ul>
+
+            <h3>📊 Data Management</h3>
+            <ul>
+                <li>PostgreSQL relational database</li>
+                <li>Structured migrations for version control</li>
+                <li>Optimized queries with indexes</li>
+                <li>Automatic timestamp management</li>
+                <li>Transaction support for payment operations</li>
+            </ul>
+
+            <h3>🎨 User Experience</h3>
+            <ul>
+                <li>Modern, responsive UI with Tailwind CSS</li>
+                <li>Mobile-friendly design</li>
+                <li>Fast and smooth interactions</li>
+                <li>Intuitive navigation and layout</li>
+                <li>Real-time payment status updates</li>
+            </ul>
+        </section>
+
+        <!-- 3. Technology Stack -->
+        <section id="tech-stack">
+            <h2>3. Technology Stack</h2>
+
+            <h3>Recommended Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-category">
+                    <h4>🖥️ Frontend</h4>
+                    <ul>
+                        <li><strong>React 18</strong> - UI Framework</li>
+                        <li><strong>React Router</strong> - Client Routing</li>
+                        <li><strong>Tailwind CSS</strong> - Styling</li>
+                        <li><strong>Axios</strong> - HTTP Client</li>
+                        <li><strong>Context API</strong> - State Management</li>
+                    </ul>
+                </div>
+                <div class="tech-category">
+                    <h4>⚙️ Backend</h4>
+                    <ul>
+                        <li><strong>Node.js 18+</strong> - Runtime</li>
+                        <li><strong>Express.js</strong> - REST API</li>
+                        <li><strong>PostgreSQL 12+</strong> - Database</li>
+                        <li><strong>JWT</strong> - Authentication</li>
+                        <li><strong>bcryptjs</strong> - Password Hashing</li>
+                    </ul>
+                </div>
+                <div class="tech-category">
+                    <h4>🔧 DevOps & Tools</h4>
+                    <ul>
+                        <li><strong>npm</strong> - Package Manager</li>
+                        <li><strong>Git</strong> - Version Control</li>
+                        <li><strong>Docker</strong> - Containerization</li>
+                        <li><strong>Jest</strong> - Testing Framework</li>
+                        <li><strong>Postman</strong> - API Testing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Why This Stack?</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Technology</th>
+                        <th>Justification</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>React</strong></td>
+                        <td>Excellent ecosystem, component reusability, large community</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Node.js + Express</strong></td>
+                        <td>JavaScript full-stack, JSON-native, rapid development</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PostgreSQL</strong></td>
+                        <td>Advanced features, JSON support, better for complex queries</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JWT</strong></td>
+                        <td>Stateless authentication, scalable, industry standard</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tailwind CSS</strong></td>
+                        <td>Rapid UI development, highly customizable, modern design</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 4. Database Schema -->
+        <section id="database">
+            <h2>4. Database Schema</h2>
+
+            <h3>Core Tables Overview</h3>
+
+            <h4>Users Table</h4>
+            <div class="diagram">users
+├── user_id (PK, INT)
+├── email (UNIQUE, VARCHAR)
+├── password_hash (VARCHAR)
+├── role (ENUM: 'admin', 'tenant')
+├── full_name (VARCHAR)
+├── phone_number (VARCHAR)
+├── created_at (TIMESTAMP)
+├── updated_at (TIMESTAMP)
+├── is_active (BOOLEAN)
+└── last_login (TIMESTAMP)</div>
+
+            <h4>Tenants Table</h4>
+            <div class="diagram">tenants
+├── tenant_id (PK, INT)
+├── user_id (FK → users.user_id)
+├── apartment_number (VARCHAR, UNIQUE)
+├── move_in_date (DATE)
+├── move_out_date (DATE, NULLABLE)
+├── monthly_rent_amount (DECIMAL)
+├── contact_email (VARCHAR)
+├── contact_phone (VARCHAR)
+├── emergency_contact_name (VARCHAR)
+├── emergency_contact_phone (VARCHAR)
+├── created_at (TIMESTAMP)
+├── updated_at (TIMESTAMP)
+└── is_current (BOOLEAN)</div>
+
+            <h4>Payments Table</h4>
+            <div class="diagram">payments
+├── payment_id (PK, INT)
+├── tenant_id (FK → tenants.tenant_id)
+├── payment_month (DATE)
+├── amount_due (DECIMAL)
+├── amount_paid (DECIMAL)
+├── payment_status (ENUM: 'unpaid', 'partially_paid', 'paid')
+├── payment_date (DATE, NULLABLE)
+├── payment_method (VARCHAR)
+├── notes (TEXT)
+├── created_at (TIMESTAMP)
+├── updated_at (TIMESTAMP)
+└── due_date (DATE)</div>
+
+            <h4>Payment History Table</h4>
+            <div class="diagram">payment_history
+├── history_id (PK, INT)
+├── payment_id (FK → payments.payment_id)
+├── tenant_id (FK → tenants.tenant_id)
+├── amount_paid (DECIMAL)
+├── previous_status (VARCHAR)
+├── new_status (VARCHAR)
+├── payment_method (VARCHAR)
+├── transaction_date (TIMESTAMP)
+├── recorded_by (FK → users.user_id)
+├── notes (TEXT)
+└── created_at (TIMESTAMP)</div>
+
+            <h4>Admin Logs Table</h4>
+            <div class="diagram">admin_logs
+├── log_id (PK, INT)
+├── admin_id (FK → users.user_id)
+├── action (VARCHAR)
+├── entity_type (VARCHAR: 'tenant', 'payment', 'user')
+├── entity_id (VARCHAR)
+├── changes_details (JSON)
+├── timestamp (TIMESTAMP)
+└── ip_address (VARCHAR)</div>
+
+            <h3>Database Relationships</h3>
+            <div class="diagram">users (1) ──→ (many) tenants
+users (1) ──→ (many) admin_logs
+tenants (1) ──→ (many) payments
+payments (1) ──→ (many) payment_history
+users (1) ──→ (many) payment_history (recorded_by)</div>
+        </section>
+
+        <!-- 5. Project Structure -->
+        <section id="structure">
+            <h2>5. Project Structure</h2>
+
+            <h3>Directory Layout</h3>
+            <pre>apartment-management-system/
+├── backend/                    # Express.js REST API
+│   ├── src/
+│   │   ├── config/            # Database & app config
+│   │   ├── controllers/       # Request handlers
+│   │   ├── middleware/        # Auth, error handling
+│   │   ├── models/            # Database models
+│   │   ├── routes/            # API routes
+│   │   └── utils/             # Helper functions
+│   ├── migrations/            # Database migrations
+│   ├── scripts/               # Utility scripts
+│   ├── __tests__/             # Test files
+│   ├── server.js              # Entry point
+│   └── package.json
+│
+├── frontend/                  # React SPA
+│   ├── src/
+│   │   ├── components/        # Reusable components
+│   │   ├── pages/             # Page components
+│   │   ├── layouts/           # Layout wrappers
+│   │   ├── services/          # API services
+│   │   ├── context/           # React Context
+│   │   ├── hooks/             # Custom hooks
+│   │   ├── utils/             # Helper utilities
+│   │   ├── styles/            # Additional styles
+│   │   ├── __tests__/         # Test files
+│   │   └── App.jsx            # Root component
+│   ├── public/                # Static assets
+│   └── package.json
+│
+├── README.md                  # Project documentation
+├── ROADMAP.md                 # Implementation roadmap
+└── package.json               # Root package config</pre>
+
+            <h3>Backend Structure Details</h3>
+            <ul>
+                <li><code>config/</code> - Database configuration and application constants</li>
+                <li><code>controllers/</code> - Business logic and request handlers (Auth, Payment, etc.)</li>
+                <li><code>middleware/</code> - Authentication, error handling, logging</li>
+                <li><code>models/</code> - Database models and queries</li>
+                <li><code>routes/</code> - API endpoint definitions</li>
+                <li><code>utils/</code> - Helper functions (password hashing, JWT, validators)</li>
+                <li><code>migrations/</code> - Database schema version control</li>
+                <li><code>scripts/</code> - Database seeding and utility scripts</li>
+            </ul>
+
+            <h3>Frontend Structure Details</h3>
+            <ul>
+                <li><code>components/</code> - Reusable React components (buttons, forms, cards)</li>
+                <li><code>pages/</code> - Full-page components (Login, Dashboard, Payments)</li>
+                <li><code>services/</code> - API client services</li>
+                <li><code>context/</code> - React Context for state management (AuthContext)</li>
+                <li><code>hooks/</code> - Custom React hooks (useAuth)</li>
+                <li><code>layouts/</code> - Layout wrapper components</li>
+                <li><code>utils/</code> - Helper utilities and formatters</li>
+            </ul>
+        </section>
+
+        <!-- 6. Implementation Roadmap -->
+        <section id="roadmap">
+            <h2>6. Implementation Roadmap</h2>
+
+            <h3>Phase 1: Project Setup & Infrastructure (Week 1)</h3>
+
+            <h4>Backend Setup</h4>
+            <ul class="checklist">
+                <li>Initialize Node.js project with Express</li>
+                <li>Set up project structure (routes, controllers, models, middleware)</li>
+                <li>Configure environment variables (.env file)</li>
+                <li>Set up PostgreSQL database connection</li>
+                <li>Install dependencies (express, pg, dotenv, bcrypt, jsonwebtoken)</li>
+            </ul>
+
+            <h4>Frontend Setup</h4>
+            <ul class="checklist">
+                <li>Create React app using Create React App or Vite</li>
+                <li>Set up project structure (components, pages, context, utilities)</li>
+                <li>Configure routing with React Router</li>
+                <li>Set up Tailwind CSS</li>
+                <li>Install dependencies (axios, react-router-dom)</li>
+            </ul>
+
+            <h4>Database Setup</h4>
+            <ul class="checklist">
+                <li>Create PostgreSQL database</li>
+                <li>Write and execute migration scripts</li>
+                <li>Set up database backup strategy</li>
+                <li>Create sample data for testing</li>
+            </ul>
+
+            <h3>Phase 2: Authentication System (Week 1-2)</h3>
+
+            <h4>Backend Implementation</h4>
+            <ul class="checklist">
+                <li>Create User model and database table</li>
+                <li>Implement password hashing with bcrypt</li>
+                <li>Create login endpoint (POST /api/auth/login)</li>
+                <li>Create registration endpoint (POST /api/auth/register)</li>
+                <li>Implement JWT token generation and verification</li>
+                <li>Create authentication middleware</li>
+                <li>Create logout endpoint (POST /api/auth/logout)</li>
+            </ul>
+
+            <h4>Frontend Implementation</h4>
+            <ul class="checklist">
+                <li>Create Login page component</li>
+                <li>Implement form validation</li>
+                <li>Set up API service for authentication</li>
+                <li>Create Registration page</li>
+                <li>Implement Protected routes (PrivateRoute component)</li>
+                <li>Create AuthContext for state management</li>
+                <li>Implement logout functionality</li>
+            </ul>
+
+            <h3>Phase 3: Core Features - Tenant Management (Week 2-3)</h3>
+
+            <h4>Backend Implementation</h4>
+            <ul class="checklist">
+                <li>Create Tenant model and database tables</li>
+                <li>Implement CRUD endpoints for tenants</li>
+                <li>Add validation for tenant data</li>
+                <li>Implement tenant search and filtering</li>
+                <li>Add pagination for tenant lists</li>
+            </ul>
+
+            <h4>Frontend Implementation</h4>
+            <ul class="checklist">
+                <li>Create Tenants list page</li>
+                <li>Implement tenant CRUD operations</li>
+                <li>Create tenant details page</li>
+                <li>Add search and filter functionality</li>
+                <li>Implement pagination UI</li>
+            </ul>
+
+            <h3>Phase 4: Payment Management (Week 3-4)</h3>
+
+            <h4>Backend Implementation</h4>
+            <ul class="checklist">
+                <li>Create Payment and Payment History models</li>
+                <li>Implement payment CRUD endpoints</li>
+                <li>Add payment tracking and history</li>
+                <li>Implement payment status management</li>
+                <li>Create payment reports (admin only)</li>
+            </ul>
+
+            <h4>Frontend Implementation</h4>
+            <ul class="checklist">
+                <li>Create Payments page</li>
+                <li>Implement payment tracking UI</li>
+                <li>Create payment history view</li>
+                <li>Add payment filters and search</li>
+                <li>Create payment reports</li>
+            </ul>
+
+            <h3>Phase 5: Admin Features (Week 4-5)</h3>
+
+            <ul class="checklist">
+                <li>Create Admin Dashboard</li>
+                <li>Implement admin logs and audit trail</li>
+                <li>Create system reports and analytics</li>
+                <li>Add admin user management</li>
+                <li>Implement system settings</li>
+            </ul>
+
+            <h3>Phase 6: Testing & Quality Assurance (Week 5-6)</h3>
+
+            <ul class="checklist">
+                <li>Write unit tests (backend & frontend)</li>
+                <li>Write integration tests</li>
+                <li>Write end-to-end tests</li>
+                <li>Conduct security testing</li>
+                <li>Performance optimization</li>
+            </ul>
+
+            <h3>Phase 7: Deployment (Week 7)</h3>
+
+            <ul class="checklist">
+                <li>Prepare production build</li>
+                <li>Deploy backend to cloud (Heroku/AWS/Azure)</li>
+                <li>Deploy frontend (Vercel/Netlify)</li>
+                <li>Set up monitoring and logging</li>
+                <li>Configure backups and disaster recovery</li>
+            </ul>
+        </section>
+
+        <!-- 7. Quick Start Guide -->
+        <section id="quick-start">
+            <h2>7. Quick Start Guide</h2>
+
+            <h3>Get Started in 5 Minutes</h3>
+
+            <pre>
+# 1. Clone the repository
+git clone https://github.com/yourusername/apartment-management-system.git
+cd apartment-management-system
+
+# 2. Install dependencies (both frontend and backend)
+npm install
+cd backend && npm install && cd ..
+cd frontend && npm install && cd ..
+
+# 3. Setup database
+# Copy and update the .env file with your PostgreSQL credentials
+# Then run migrations:
+npm run db:migrate
+npm run db:seed
+
+# 4. Start development servers
+npm run dev
+            </pre>
+
+            <div class="highlight">
+                <strong>Note:</strong> API will be available at http://localhost:5000<br>
+                Frontend will be available at http://localhost:3000
+            </div>
+
+            <h3>Development Workflow</h3>
+            <pre>
+# Terminal 1 - Backend
+cd backend
+npm start
+
+# Terminal 2 - Frontend
+cd frontend
+npm start
+
+# Terminal 3 - Database (if using local PostgreSQL)
+# Start your PostgreSQL service
+            </pre>
+        </section>
+
+        <!-- 8. Prerequisites & Setup -->
+        <section id="prerequisites">
+            <h2>8. Prerequisites & Detailed Setup</h2>
+
+            <h3>System Requirements</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Requirement</th>
+                        <th>Version</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Node.js</strong></td>
+                        <td>v18 or higher</td>
+                        <td>JavaScript runtime</td>
+                    </tr>
+                    <tr>
+                        <td><strong>npm</strong></td>
+                        <td>v9 or higher</td>
+                        <td>Package manager</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PostgreSQL</strong></td>
+                        <td>v12 or higher</td>
+                        <td>Database</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Git</strong></td>
+                        <td>Latest</td>
+                        <td>Version control</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Installation Steps</h3>
+
+            <h4>Step 1: Install Prerequisites</h4>
+            <ul>
+                <li>Download and install Node.js from nodejs.org</li>
+                <li>Download and install PostgreSQL from postgresql.org</li>
+                <li>Download and install Git from git-scm.com</li>
+                <li>Verify installations by running:
+                    <pre>node --version
+npm --version
+psql --version
+git --version</pre>
+                </li>
+            </ul>
+
+            <h4>Step 2: Clone Repository</h4>
+            <pre>git clone https://github.com/yourusername/apartment-management-system.git
+cd apartment-management-system</pre>
+
+            <h4>Step 3: Install Dependencies</h4>
+            <pre># Root dependencies
+npm install
+
+# Backend dependencies
+cd backend
+npm install
+cd ..
+
+# Frontend dependencies
+cd frontend
+npm install
+cd ..</pre>
+
+            <h4>Step 4: Database Configuration</h4>
+            <pre># Connect to PostgreSQL
+psql -U postgres
+
+# In psql terminal:
+CREATE DATABASE apartment_management_system;
+CREATE USER ams_user WITH PASSWORD 'secure_password';
+GRANT ALL PRIVILEGES ON DATABASE apartment_management_system TO ams_user;
+            </pre>
+
+            <h4>Step 5: Environment Setup</h4>
+            <p>Create a <code>.env</code> file in the backend directory:</p>
+            <pre>NODE_ENV=development
+PORT=5000
+DATABASE_URL=postgresql://ams_user:secure_password@localhost:5432/apartment_management_system
+JWT_SECRET=your_jwt_secret_key_here_change_in_production
+JWT_EXPIRE=7d
+BCRYPT_ROUNDS=10</pre>
+
+            <h4>Step 6: Run Migrations</h4>
+            <pre>cd backend
+npm run db:migrate
+npm run db:seed
+cd ..</pre>
+
+            <h3>Starting Development</h3>
+
+            <h4>Start Backend Server</h4>
+            <pre>cd backend
+npm start
+# Server runs on http://localhost:5000</pre>
+
+            <h4>Start Frontend Development Server</h4>
+            <pre>cd frontend
+npm start
+# Frontend runs on http://localhost:3000</pre>
+
+            <h3>Testing</h3>
+            <pre># Run all tests
+npm run test
+
+# Run specific test suite
+cd backend
+npm test -- authMiddleware.test.js
+
+cd ../frontend
+npm test -- Login.test.js</pre>
+
+            <h3>Building for Production</h3>
+            <pre># Build backend
+cd backend
+npm run build
+
+# Build frontend
+cd frontend
+npm run build</pre>
+        </section>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Apartment Management System - Project Report</strong></p>
+            <p>Generated on <span id="footer-date"></span></p>
+            <p>Status: Active Development | License: MIT</p>
+            <p style="margin-top: 20px; font-size: 0.85em; color: #999;">
+                This report contains comprehensive documentation of the Apartment Management System project, 
+                including system architecture, database schema, and implementation roadmap.
+            </p>
+        </div>
+    </div>
+
+    <!-- Fixed Controls -->
+    <div class="controls no-print">
+        <button onclick="printPDF()">📄 Download as PDF</button>
+        <button onclick="copyToClipboard()">📋 Copy All</button>
+    </div>
+
+    <script>
+        // Set current date
+        function setCurrentDate() {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', options);
+            
+            document.getElementById('generated-date').textContent = dateStr;
+            document.getElementById('footer-date').textContent = dateStr;
+        }
+
+        // Print to PDF
+        function printPDF() {
+            // Add a title to the document before printing
+            const originalTitle = document.title;
+            document.title = 'Apartment-Management-System-Report.pdf';
+            
+            // Trigger print dialog
+            window.print();
+            
+            // Restore original title
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 100);
+        }
+
+        // Copy all text to clipboard
+        function copyToClipboard() {
+            const container = document.querySelector('.container');
+            const text = container.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#2563eb';
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy: ' + err);
+            });
+        }
+
+        // Smooth scroll for table of contents
+        document.querySelectorAll('.table-of-contents a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const element = document.querySelector(targetId);
+                
+                if (element) {
+                    element.scroll ({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    window.scrollTo({
+                        top: element.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', setCurrentDate);
+
+        // Keyboard shortcut for print (Ctrl+P or Cmd+P handled by browser)
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                printPDF();
+            }
+        });
+    </script>
+</body>
+</html>
