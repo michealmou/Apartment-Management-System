@@ -14,15 +14,18 @@ class TenantController {
             if (unit_type) filters.unit_type = unit_type;
 
             const result = await Tenant.getAll(filters, parseInt(page), parseInt(limit));
-            // log the audit
-            await AuditLogger.log({
-                admin_id: req.user.id,
-                action: 'READ_LIST',
-                entity_type: 'tenant',
-                ip_address: AuditLogger.getClientIp(req),
-                user_agent: req.headers['user-agent'],
-                notes: `Filters: ${JSON.stringify(filters)}`,
-            });
+            
+            // Log audit only if user is admin and has valid userId
+            if (req.user && req.user.role === 'admin' && req.user.userId) {
+                await AuditLogger.log({
+                    admin_id: req.user.userId,
+                    action: 'READ_LIST',
+                    entity_type: 'tenant',
+                    ip_address: AuditLogger.getClientIp(req),
+                    user_agent: req.headers['user-agent'],
+                    notes: `Filters: ${JSON.stringify(filters)}`,
+                });
+            }
             res.json({
                 success: true,
                 data: result.data,
@@ -45,15 +48,17 @@ class TenantController {
                 });
             }
 
-            // log the audit
-            await AuditLogger.log({
-                admin_id: req.user.id,
-                action: 'READ_DETAIL',
-                entity_type: 'tenant',
-                entity_id: parseInt(id),
-                ip_address: AuditLogger.getClientIp(req),
-                user_agent: req.headers['user-agent'],
-            });
+            // Log audit only if user is admin and has valid userId
+            if (req.user && req.user.role === 'admin' && req.user.userId) {
+                await AuditLogger.log({
+                    admin_id: req.user.userId,
+                    action: 'READ_DETAIL',
+                    entity_type: 'tenant',
+                    entity_id: parseInt(id),
+                    ip_address: AuditLogger.getClientIp(req),
+                    user_agent: req.headers['user-agent'],
+                });
+            }
 
             res.json({
                 success: true,
@@ -80,16 +85,18 @@ class TenantController {
             };
             const tenant = await Tenant.create(tenantData);
 
-            // log the audit
-            await AuditLogger.log({
-                admin_id: req.user.id,
-                action: 'CREATE',
-                entity_type: 'tenant',
-                entity_id: tenant.id,
-                new_values: tenant,
-                ip_address: AuditLogger.getClientIp(req),
-                user_agent: req.headers['user-agent'],
-            });
+            // Log audit only if user is admin and has valid userId
+            if (req.user && req.user.role === 'admin' && req.user.userId) {
+                await AuditLogger.log({
+                    admin_id: req.user.userId,
+                    action: 'CREATE',
+                    entity_type: 'tenant',
+                    entity_id: tenant.id,
+                    new_values: tenant,
+                    ip_address: AuditLogger.getClientIp(req),
+                    user_agent: req.headers['user-agent'],
+                });
+            }
             res.status(201).json({
                 success: true,
                 message: 'Tenant created successfully',
@@ -134,16 +141,20 @@ class TenantController {
                     change[key] = value;
                 }
             }
-            await AuditLogger.log({
-                admin_id: req.user.id,
-                action: 'UPDATE',
-                entity_type: 'tenant',
-                entity_id: parseInt(id),
-                old_values: oldTenant,
-                new_values: change,
-                ip_address: AuditLogger.getClientIp(req),
-                user_agent: req.headers['user-agent'],
-            });
+            
+            // Log audit only if user is admin and has valid userId
+            if (req.user && req.user.role === 'admin' && req.user.userId) {
+                await AuditLogger.log({
+                    admin_id: req.user.userId,
+                    action: 'UPDATE',
+                    entity_type: 'tenant',
+                    entity_id: parseInt(id),
+                    old_values: oldTenant,
+                    new_values: change,
+                    ip_address: AuditLogger.getClientIp(req),
+                    user_agent: req.headers['user-agent'],
+                });
+            }
             res.json({
                 success: true,
                 message: 'Tenant updated successfully',
@@ -165,20 +176,25 @@ class TenantController {
                     message: 'Tenant not found',
                 });
             }
-            await Tenant.delete(parseInt(id));
-            // log the audit
-            await AuditLogger.log({
-                admin_id: req.user.id,
-                action: 'DELETE',
-                entity_type: 'tenant',
-                entity_id: parseInt(id),
-                old_values: tenant,
-                ip_address: AuditLogger.getClientIp(req),
-                user_agent: req.headers['user-agent'],
-            });
+            await Tenant.deleteWithUser(parseInt(id));
+            
+            // Log audit only if user is admin and has valid userId
+            if (req.user && req.user.role === 'admin' && req.user.userId) {
+                await AuditLogger.log({
+                    admin_id: req.user.userId,
+                    action: 'DELETE',
+                    entity_type: 'tenant',
+                    entity_id: parseInt(id),
+                    old_values: tenant,
+                    ip_address: AuditLogger.getClientIp(req),
+                    user_agent: req.headers['user-agent'],
+                    notes: tenant.user_id ? `Associated user account (ID: ${tenant.user_id}) also deleted` : 'No associated user account'
+                });
+            }
+            
             res.json({
                 success: true,
-                message: 'Tenant deleted successfully',
+                message: 'Tenant and associated user account deleted successfully',
             });
         } catch (error) {
             next(error);

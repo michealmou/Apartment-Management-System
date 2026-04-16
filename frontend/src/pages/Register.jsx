@@ -126,12 +126,12 @@ const Register = () => {
                         <input
                             id="phone"
                             type="tel"
-                            placeholder="Enter your phone number"
+                            placeholder="+970599365800"
                             {...register('phone', {
                                 required: 'Phone number is required',
                                 pattern: {
-                                    value: /^[\d\-\s\+\(\)]{10,}$/,
-                                    message: 'Invalid phone number'
+                                    value: /^(\+972|\+970)\d{9}$|^\d{9}$/,
+                                    message: 'Invalid phone number format (+972599365800 or +970599365800)'
                                 }
                             })}
                             className={errors.phone ? 'input-error' : ''}

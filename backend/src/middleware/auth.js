@@ -13,6 +13,7 @@ const authMiddleware = (req, res, next) => {
         }
         const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded; // Attach user info to request object
+        console.log('Auth decoded token:', req.user); // DEBUG
         next();
     } catch (err) {
         return res.status(401).json({

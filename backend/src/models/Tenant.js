@@ -143,9 +143,38 @@ class Tenant {
     }
     // delete tenant
     static async delete(id) {
-        const query = 'DELETE FROM tenants WHERE id = $1 RETURNING id';
+        const query = `
+            DELETE FROM tenants 
+            WHERE id = $1 
+            RETURNING id, user_id
+        `;
         const result = await db.query(query, [id]);
         return result.rows[0];
+    }
+
+    // delete tenant and associated user account
+    static async deleteWithUser(id) {
+        // Get tenant to find user_id
+        const getTenantQuery = 'SELECT user_id FROM tenants WHERE id = $1';
+        const tenantResult = await db.query(getTenantQuery, [id]);
+        
+        if (!tenantResult.rows[0]) {
+            throw new Error('Tenant not found');
+        }
+
+        const userId = tenantResult.rows[0].user_id;
+
+        // Delete tenant first (will cascade if configured, but we're explicit here)
+        const deleteTenantQuery = 'DELETE FROM tenants WHERE id = $1';
+        await db.query(deleteTenantQuery, [id]);
+
+        // Delete associated user account
+        if (userId) {
+            const deleteUserQuery = 'DELETE FROM users WHERE id = $1';
+            await db.query(deleteUserQuery, [userId]);
+        }
+
+        return { id, user_id: userId };
     }
 }
 

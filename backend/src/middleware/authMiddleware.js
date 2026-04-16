@@ -56,6 +56,7 @@ const requireAdminOrManager = (req, res, next) => {
 
 module.exports = {
     authMiddleware,
+    authenticate: authMiddleware, // Alias for compatibility
     requireAdmin,
     requireAdminOrManager,
 };

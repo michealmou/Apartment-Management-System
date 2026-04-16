@@ -19,10 +19,10 @@ afterAll(async () => {
 });
 
 describe('Tenant API Endpoints', () => {
-    describe('POST /api/tenants', () => {
+    describe('POST /api/v1/tenants', () => {
         it('should create a new tenant with valid data', async () => {
             const res = await request(app)
-                .post('/api/tenants')
+                .post('/api/v1/tenants')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     name: 'John Doe',
@@ -42,7 +42,7 @@ describe('Tenant API Endpoints', () => {
         });
         it('should reject invalid email', async () => {
             const res = await request(app)
-                .post('/api/tenants')
+                .post('/api/v1/tenants')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     name: 'Jane Doe',
@@ -59,7 +59,7 @@ describe('Tenant API Endpoints', () => {
             
             //create initial tenant
             await request(app)
-                .post('/api/tenants')
+                .post('/api/v1/tenants')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     name: 'Tenant one',
@@ -69,7 +69,7 @@ describe('Tenant API Endpoints', () => {
 
             //Try to create with same email 
             const res = await request(app)
-                .post('/api/tenants')
+                .post('/api/v1/tenants')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     name: 'Tenant two',
@@ -82,7 +82,7 @@ describe('Tenant API Endpoints', () => {
 
         it('should require authentication', async () => {
             const res = await request(app)
-                .post('/api/tenants')
+                .post('/api/v1/tenants')
                 .send({
                     name: 'John Doe',
                     email: 'john@example.com',
@@ -95,7 +95,7 @@ describe('Tenant API Endpoints', () => {
             const userToken = TokenUtils.generateAccessToken(2, 'user@test.com', 'user');
 
             const res = await request(app)
-                .post('/api/tenants')
+                .post('/api/v1/tenants')
                 .set('Authorization', `Bearer ${userToken}`)
                 .send({
                     name: 'John Doe',
@@ -106,10 +106,10 @@ describe('Tenant API Endpoints', () => {
         });
     });
 
-    describe('GET /api/tenants', () => {
+    describe('GET /api/v1/tenants', () => {
         it('should retriever all tenants with pagination', async () => {
             const res = await request(app)
-                .get('/api/tenants?page=1&limit=10')
+                .get('/api/v1/tenants?page=1&limit=10')
                 .set('Authorization', `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
@@ -121,7 +121,7 @@ describe('Tenant API Endpoints', () => {
         });
         it('should filter tenants by status', async () => {
             const res = await request(app)
-                .get('/api/tenants?status=active')
+                .get('/api/v1/tenants?status=active')
                 .set('Authorization', `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
@@ -130,17 +130,17 @@ describe('Tenant API Endpoints', () => {
 
         it('should search tenants by name', async () => {
             const res = await request(app)
-                .get('/api/tenants?search=John')
+                .get('/api/v1/tenants?search=John')
                 .set('Authorization', `Bearer ${adminToken}`);
             expect(res.status).toBe(200);
             expect(res.body.data.length).toBeGreaterThanOrEqual(0);
         });
     });
 
-    describe('GET /api/tenants/:id', () => {
+    describe('GET /api/v1/tenants/:id', () => {
         it('should get tenant details by id', async () => {
             const res = await request(app)
-                .get(`/api/tenants/${createdTenantId}`)
+                .get(`/api/v1/tenants/${createdTenantId}`)
                 .set('Authorization', `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
@@ -150,16 +150,16 @@ describe('Tenant API Endpoints', () => {
 
         it('should return 404 for non-existent tenant', async () => {
             const res = await request(app)
-                .get('/api/tenants/99909')
+                .get('/api/v1/tenants/99909')
                 .set('Authorization', `Bearer ${adminToken}`);
             expect(res.status).toBe(404);
         });
     });
 
-    describe('PUT /api/tenants/:id', () => {
+    describe('PUT /api/v1/tenants/:id', () => {
         it('should update a tenant', async () => {
             const res = await request(app)
-                .put(`/api/tenants/${createdTenantId}`)
+                .put(`/api/v1/tenants/${createdTenantId}`)
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     name: 'John Updated',
@@ -171,7 +171,7 @@ describe('Tenant API Endpoints', () => {
         });
         it('should return 404 for non-existent tenant', async () => {
             const res = await request(app)
-                .put('/api/tenants/99909')
+                .put('/api/v1/tenants/99909')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     name: 'Test',
@@ -180,10 +180,10 @@ describe('Tenant API Endpoints', () => {
         });
     });
 
-    describe('DELETE /api/tenants/:id', () => {
+    describe('DELETE /api/v1/tenants/:id', () => {
         it('should delete a tenant', async () => {
             const res = await request(app)
-                .delete(`/api/tenants/${createdTenantId}`)
+                .delete(`/api/v1/tenants/${createdTenantId}`)
                 .set('Authorization', `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
@@ -192,7 +192,7 @@ describe('Tenant API Endpoints', () => {
 
         it('should return 404 for non-existent tenant', async () => {
             const res = await request(app)
-                .delete('/api/tenants/99909')
+                .delete('/api/v1/tenants/99909')
                 .set('Authorization', `Bearer ${adminToken}`);
 
             expect(res.status).toBe(404);

@@ -1,0 +1,166 @@
+.tenant-table-container {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.tenant-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tenant-table thead {
+    background-color: #f5f7fa;
+    border-bottom: 2px solid #e1e8ed;
+}
+
+.tenant-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tenant-table tbody tr {
+    border-bottom: 1px solid #e1e8ed;
+    transition: background-color 0.2s ease;
+}
+
+.tenant-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.tenant-table td {
+    padding: 1rem;
+    color: #2c3e50;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.contact-info div:first-child {
+    font-weight: 500;
+}
+
+.contact-info div:last-child {
+    color: #7f8c8d;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.badge-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+.btn-edit {
+    color: #3498db;
+}
+
+.btn-delete {
+    color: #e74c3c;
+}
+
+/* Responsive Mobile Design */
+@media (max-width: 768px) {
+    .tenant-table {
+        font-size: 0.9rem;
+    }
+
+    .tenant-table th,
+    .tenant-table td {
+        padding: 0.75rem;
+    }
+
+    /* Card layout for mobile */
+    @supports (display: grid) {
+        .tenant-table {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .tenant-table thead {
+            display: none;
+        }
+
+        .tenant-table tbody {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .tenant-table tbody tr {
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .tenant-table td {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1rem;
+            padding: 0;
+            border: none;
+        }
+
+        .tenant-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+
+        .tenant-table td:last-child {
+            grid-column: 1 / -1;
+        }
+
+        .tenant-table td:last-child::before {
+            content: 'Actions';
+        }
+
+        .actions-cell {
+            justify-content: flex-start;
+        }
+    }
+}
