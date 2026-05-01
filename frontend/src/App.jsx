@@ -20,6 +20,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import TenantDetails from './pages/TenantDetails';
 import PaymentManagement from './pages/PaymentManagement';
 import PaymentDetails from './pages/PaymentDetails';
+import PaymentAnalytics from './pages/PaymentAnalytics';
 import NotFound from './pages/NotFound';
 
 import './App.css';
@@ -71,6 +72,15 @@ function App() {
                                 element={
                                     <PrivateRoute requiredRole="admin">
                                         <AdminDashboard />
+                                    </PrivateRoute>
+                                }
+                            />
+
+                            <Route
+                                path="/analytics"
+                                element={
+                                    <PrivateRoute requiredRole="admin">
+                                        <PaymentAnalytics />
                                     </PrivateRoute>
                                 }
                             />
