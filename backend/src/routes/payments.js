@@ -3,27 +3,47 @@ const router = express.Router();
 const paymentController = require('../controllers/paymentController');
 const { authMiddleware, requireAdmin } = require('../middleware/authMiddleware');
 
-// All payment rots require authentication
+// All payment routes require authentication
 router.use(authMiddleware);
 
-// statistics endpoint (plce before /:id to avoid conflict)
-router.get('/stats', paymentController.getPaymentStats);
+// Stats endpoint (place before /:id to avoid conflicts)
+router.get('/stats', requireAdmin, (req, res, next) => {
+    paymentController.getPaymentStats(req, res, next);
+});
 
-// all payments - admin only
-router.get('/', requireAdmin, paymentController.getAllPayments);
+// List all payments (admin only)
+router.get('/', requireAdmin, (req, res, next) => {
+    paymentController.getAllPayments(req, res, next);
+});
 
-// create payment - admin only
-router.post('/', requireAdmin, paymentController.createPayment);
+// Create new payment (admin only)
+router.post('/', requireAdmin, (req, res, next) => {
+    paymentController.createPayment(req, res, next);
+});
 
-// get single payment by id 
-router.get('/:id', paymentController.getPaymentById);
+// Record a payment (admin only)
+router.post('/record', requireAdmin, (req, res, next) => {
+    paymentController.recordPayment(req, res, next);
+});
 
-// update payment - admin only
-router.put('/:id', requireAdmin, paymentController.updatePayment);
+// Get tenant payment history
+router.get('/tenant/:tenant_id', (req, res, next) => {
+    paymentController.getTenantPayments(req, res, next);
+});
 
-// get tenant payment history - admin or self
-router.get('/tenant/:tenant_id', paymentController.getTenantPayments);
-router.get('/stats/monthly-collected', authMiddleware, requireAdmin, paymentController.getMonthlyRentCollected);
-router.get('/stats/outstanding', authMiddleware, requireAdmin, paymentController.getOutstandingBalance);
-router.get('/stats/status-overview', authMiddleware, requireAdmin, paymentController.getPaymentStats);
+// Get single payment by ID
+router.get('/:id', (req, res, next) => {
+    paymentController.getPaymentById(req, res, next);
+});
+
+// Update payment (admin only)
+router.put('/:id', requireAdmin, (req, res, next) => {
+    paymentController.updatePayment(req, res, next);
+});
+
+// Delete payment (admin only)
+router.delete('/:id', requireAdmin, (req, res, next) => {
+    paymentController.deletePayment(req, res, next);
+});
+
 module.exports = router;

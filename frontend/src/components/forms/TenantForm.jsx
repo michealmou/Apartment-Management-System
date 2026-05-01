@@ -53,8 +53,8 @@ const TenantForm = ({ tenant, onSave, onCancel }) => {
         // Phone validation
         if (!formData.phone.trim()) {
             newErrors.phone = 'Phone is required';
-        } else if (!/^[\d\s\-\+\(\)]{8,}$/.test(formData.phone.replace(/\s/g, ''))) {
-            newErrors.phone = 'Invalid phone format - at least 8 digits required';
+        } else if (!/^(\+972|\+970)\d{9}$|^\d{9}$/.test(formData.phone.replace(/\s/g, ''))) {
+            newErrors.phone = 'Invalid phone format (+972599365800 or +970599365800)';
         }
 
         // Unit number validation
