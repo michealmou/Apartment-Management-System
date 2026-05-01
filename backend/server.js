@@ -1,9 +1,27 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const authRoutes = require('./src/routes/auth');
-const tenantRoutes = require('./src/routes/tenants');
-const paymentRoutes = require('./src/routes/payments');
-require('dotenv').config();
+const db = require('./src/config/database');
+
+console.log('🚀 Starting server...');
+console.log('📝 Loading environment variables...');
+console.log('   DB_HOST:', process.env.DB_HOST);
+console.log('   DB_PORT:', process.env.DB_PORT);
+console.log('   DB_NAME:', process.env.DB_NAME);
+console.log('   API_PORT:', process.env.PORT || 5000);
+
+let authRoutes, tenantRoutes, paymentRoutes;
+
+try {
+    console.log('📦 Loading routes...');
+    authRoutes = require('./src/routes/auth');
+    tenantRoutes = require('./src/routes/tenants');
+    paymentRoutes = require('./src/routes/payments');
+    console.log('✅ Routes loaded successfully');
+} catch (err) {
+    console.error('❌ Error loading routes:', err.message);
+    process.exit(1);
+}
 
 const app = express();
 
@@ -47,10 +65,53 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log('auth endpoints: https://localhost:' + PORT + '/api/auth');
-});
+
+// Test database connection before starting server
+console.log('🔌 Testing database connection...');
+db.query('SELECT NOW()')
+    .then(() => {
+        console.log('✅ Database connection successful!');
+        
+        // Start server
+        const server = app.listen(PORT, () => {
+            console.log(`\n✅ Server running on port ${PORT}`);
+            console.log(`🌐 API URL: http://localhost:${PORT}/api/v1`);
+            console.log(`🏥 Health check: http://localhost:${PORT}/health\n`);
+        });
+
+        // Graceful shutdown
+        process.on('SIGTERM', async () => {
+            console.log('\n⛔ SIGTERM received, shutting down gracefully...');
+            server.close(async () => {
+                await db.end();
+                console.log('✅ Database connection closed');
+                process.exit(0);
+            });
+        });
+
+        process.on('SIGINT', async () => {
+            console.log('\n⛔ SIGINT received, shutting down gracefully...');
+            server.close(async () => {
+                await db.end();
+                console.log('✅ Database connection closed');
+                process.exit(0);
+            });
+        });
+    })
+    .catch((err) => {
+        console.error('\n❌ Database connection FAILED!');
+        console.error('Error:', err.message);
+        console.error('\nTroubleshooting:');
+        console.error('1. Make sure PostgreSQL is running');
+        console.error('2. Check .env file for correct credentials:');
+        console.error('   DB_HOST:', process.env.DB_HOST);
+        console.error('   DB_PORT:', process.env.DB_PORT);
+        console.error('   DB_USER:', process.env.DB_USER);
+        console.error('   DB_NAME:', process.env.DB_NAME);
+        console.error('3. Run: npm run db:migrate && npm run db:seed');
+        process.exit(1);
+    });
+
 module.exports = app; // for testing
 // // import config and middleware
 // const { PORT, NODE_ENV, CORS_ORIGIN, API_VERSION } = require('./src/config/constants');

@@ -18,7 +18,7 @@ import Register from './pages/Register';
 import Tenants from './pages/Tenants';
 import AdminDashboard from './pages/AdminDashboard';
 import TenantDetails from './pages/TenantDetails';
-import Payments from './pages/Payments';
+import PaymentManagement from './pages/PaymentManagement';
 import PaymentDetails from './pages/PaymentDetails';
 import NotFound from './pages/NotFound';
 
@@ -60,7 +60,7 @@ function App() {
                                 path="/payments"
                                 element={
                                     <PrivateRoute requiredRole={['tenant', 'admin']}>
-                                        <Payments />
+                                        <PaymentManagement />
                                     </PrivateRoute>
                                 }
                             />

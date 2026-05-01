@@ -14,6 +14,7 @@ const seedDatabase = async () => {
 
         if (existingAdmin.rows.length > 0) {
             console.log('✅ Database already seeded, skipping...');
+            await db.end();
             process.exit(0);
         }
 
@@ -89,9 +90,11 @@ const seedDatabase = async () => {
         );
         console.log('Admin log entry created');
         console.log('All done!');
+        await db.end();
         process.exit(0);
     } catch (err) {
         console.error('Error seeding database:', err);
+        await db.end();
         process.exit(1);
     }
 };
